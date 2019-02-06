@@ -1,0 +1,17 @@
+{% set menu = craft.entries.section('menu').slug('not startseite').level('<=2').excludeFromNav('not 1') %}
+
+<div class="header-wrapper">
+        <div class="row header">
+            <div class="medium-3 large-3 columns">
+                <h1 class="hide">{{ siteName }}</h1>
+                <a href="/"><img src="https://placehold.it/300x150/CCCCCC/FFFFFF" alt="<%= projectname %>" class="logo" /></a>
+            </div>
+            <div class="medium-9 large-9 columns">
+                <nav class="main-nav hide-for-small-only">
+
+                    {% include 'partials/nav' %}
+
+                </nav>
+            </div>
+        </div>
+    </div>
