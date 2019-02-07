@@ -39,13 +39,18 @@
     }
   },
   "scripts": {
+    "post-root-package-install": [
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+    ],
     "post-create-project-cmd": [
-      "@php -r \"copy('.env.example', '.env');\"",
-      "@php -r \"unlink('composer.json');\"",
-      "@php -r \"unlink('LICENSE.md');\"",
-      "@php -r \"unlink('README.md');\"",
-      "@composer dump-autoload -o",
-      "@php craft setup/welcome"
+      "@php craft setup/welcome",
+      "@php nys-setup welcome"
+    ],
+    "post-update-cmd": [
+      "@php nys-setup update"
+    ],
+    "post-install-cmd": [
+      "@php nys-setup update"
     ]
   }
 }
