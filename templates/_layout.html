@@ -1,15 +1,26 @@
+{% set baseUrl = alias('@baseUrl') ~ '/' %}
+{% set staticAssetsVersion = craft.app.config.general.custom.staticAssetsVersion %}
 <!DOCTYPE html>
-<html class="no-js" lang="de">
+<html class="no-js" lang="{{ craft.app.language |slice(0,2) }}">
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="home" href="{{ siteUrl }}" />
-    {% if craft.request.serverName != '<%= liveurl %>' %}
-        <meta name="robots" content="noindex, nofollow">
-    {% endif %}
+{%- minify -%}
+    <head>
+        <link rel="dns-prefetch" href="{{ baseUrl }}">
+        <link rel="preconnect" href="{{ baseUrl }}" crossorigin>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1">
+        
+        <script>
+            {{ source("_inlinejs/loadjs.min.js") }}
+            {{ source("_inlinejs/tiny-cookie.min.js") }}
+        </script>
+{%- endminify -%}
 
-    {% hook 'seomaticRender' %}
+        <script type="text/javascript">
+            var staticAssetsVersion = "{{ staticAssetsVersion }}";
+            var assetsBaseUrl = "{{ baseUrl }}";
+            var retina = window.devicePixelRatio > 1;
+        </script>
 
     <link rel="stylesheet" href="/css/app.css" />
 
@@ -21,25 +32,31 @@
       <div class="container">
 
         {% block content %}
-        <p>If you see me, you haven’t set your
-            <code>{% verbatim %}{% block content %}…{% endblock %}{% endverbatim %}</code>yet.</p>
-        <p>See Twig’s <a href="http://twig.sensiolabs.org/doc/templates.html#template-inheritance">Template Inheritance</a> documentation for an explanation.</p>
         {% endblock %}
 
         </div> <!-- container -->
 
 
-
-    {% if craft.request.serverName != '<%= liveurl %>' %}
-    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="/bower_components/foundation-sites/dist/js/foundation.min.js"></script>
-    <script src="/js/plugins.js"></script>
-    <script src="/js/app.js"></script>
-    {% else %}
-    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="/bower_components/foundation-sites/dist/js/foundation.min.js"></script>
-    <script src="/js/min/scripts.min.js"></script>
-    {% endif %}
+        <script>
+                // define a dependency bundle
+                loadjs(
+                    [
+                        '{{ baseUrl }}js/vue.min.{{staticAssetsVersion}}.js',
+                    ],
+                    'vue'
+                );
+                loadjs(
+                    [
+                        '{{ baseUrl }}js/axios.min.{{staticAssetsVersion}}.js',
+                    ],
+                    'axios'
+                );
+                loadjs.ready(['vue', 'axios'], {
+                    success: function() {
+                        
+                    }
+                });
+            </script>
 
 </body>
 
