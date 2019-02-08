@@ -229,48 +229,6 @@ function doSynchronousLoop(data, processData, done) {
     }
 }
 
-// Process the critical path CSS one at a time
-function processCriticalCSS(element, i, callback) {
-    const criticalSrc = pkg.urls.critical + element.url;
-    const criticalDest = pkg.paths.templates + element.template + "_critical.min.css";
-
-    let criticalWidth = 1200;
-    let criticalHeight = 1200;
-    if (element.template.indexOf("amp_") !== -1) {
-        criticalWidth = 600;
-        criticalHeight = 19200;
-    }
-    $.fancyLog("-> Generating critical CSS: " + $.chalk.cyan(criticalSrc) + " -> " + $.chalk.magenta(criticalDest));
-    $.critical.generate({
-        src: criticalSrc,
-        dest: criticalDest,
-        penthouse: {
-            blockJSRequests: false,
-            forceInclude: pkg.globs.criticalWhitelist
-        },
-        inline: false,
-        ignore: [],
-        css: [
-            pkg.paths.dist.css + pkg.vars.siteCssName,
-        ],
-        minify: true,
-        width: criticalWidth,
-        height: criticalHeight
-    }, (err, output) => {
-        if (err) {
-            $.fancyLog($.chalk.magenta(err));
-        }
-        callback();
-    });
-}
-
-// critical css task
-gulp.task("criticalcss", ["css"], (callback) => {
-    doSynchronousLoop(pkg.globs.critical, processCriticalCSS, () => {
-        // all done
-        callback();
-    });
-});
 
 // Process the downloads one at a time
 function processDownload(element, i, callback) {
@@ -291,76 +249,6 @@ gulp.task("download", (callback) => {
     });
 });
 
-// Run pa11y accessibility tests on each template
-function processAccessibility(element, i, callback) {
-    const accessibilitySrc = pkg.urls.critical + element.url;
-    const cliReporter = require("./node_modules/pa11y/reporter/cli.js");
-    const options = {
-        log: cliReporter,
-        ignore:
-            [
-                "notice",
-                "warning"
-            ],
-    };
-    const test = $.pa11y(options);
-
-    $.fancyLog("-> Checking Accessibility for URL: " + $.chalk.cyan(accessibilitySrc));
-    test.run(accessibilitySrc, (error, results) => {
-        cliReporter.results(results, accessibilitySrc);
-        callback();
-    });
-}
-
-// accessibility task
-gulp.task("a11y", (callback) => {
-    doSynchronousLoop(pkg.globs.critical, processAccessibility, () => {
-        // all done
-        callback();
-    });
-});
-
-// favicons-generate task
-gulp.task("favicons-generate", () => {
-    $.fancyLog("-> Generating favicons");
-    return gulp.src(pkg.paths.favicon.src).pipe($.favicons({
-        appName: pkg.name,
-        appDescription: pkg.description,
-        developerName: pkg.author,
-        developerURL: pkg.urls.live,
-        background: "#FFFFFF",
-        path: pkg.paths.favicon.path,
-        url: pkg.site_url,
-        display: "standalone",
-        orientation: "portrait",
-        version: pkg.version,
-        logging: false,
-        online: false,
-        html: pkg.paths.build.html + "favicons.html",
-        replace: true,
-        icons: {
-            android: false, // Create Android homescreen icon. `boolean`
-            appleIcon: true, // Create Apple touch icons. `boolean`
-            appleStartup: false, // Create Apple startup images. `boolean`
-            coast: true, // Create Opera Coast icon. `boolean`
-            favicons: true, // Create regular favicons. `boolean`
-            firefox: true, // Create Firefox OS icons. `boolean`
-            opengraph: false, // Create Facebook OpenGraph image. `boolean`
-            twitter: false, // Create Twitter Summary Card image. `boolean`
-            windows: true, // Create Windows 8 tile icons. `boolean`
-            yandex: true // Create Yandex browser icon. `boolean`
-        }
-    })).pipe(gulp.dest(pkg.paths.favicon.dest));
-});
-
-// copy favicons task
-gulp.task("favicons", ["favicons-generate"], () => {
-    $.fancyLog("-> Copying favicon.ico");
-    return gulp.src(pkg.globs.siteIcon)
-        .pipe($.size({gzip: true, showFiles: true}))
-        .pipe(gulp.dest(pkg.paths.dist.base));
-});
-
 // imagemin task
 gulp.task("imagemin", () => {
     $.fancyLog("-> Minimizing images in " + pkg.paths.src.img);
@@ -374,20 +262,6 @@ gulp.task("imagemin", () => {
             use: []
         }))
         .pipe(gulp.dest(pkg.paths.dist.img));
-});
-
-// generate-fontello task
-gulp.task("generate-fontello", () => {
-    return gulp.src(pkg.paths.src.fontello + "config.json")
-        .pipe($.fontello())
-        .pipe($.print())
-        .pipe(gulp.dest(pkg.paths.build.fontello));
-});
-
-// copy fonts task
-gulp.task("fonts", ["generate-fontello"], () => {
-    return gulp.src(pkg.globs.fonts)
-        .pipe(gulp.dest(pkg.paths.dist.fonts));
 });
 
 // static assets version task

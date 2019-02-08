@@ -11,6 +11,9 @@
         <meta name="viewport" content="width=device-width,minimum-scale=1">
         
         <script>
+            {% if craft.app.config.general.isSystemOn %}
+                {{ source("_inlinejs/register-service-worker.min.js") }}
+            {% endif %}
             {{ source("_inlinejs/loadjs.min.js") }}
             {{ source("_inlinejs/tiny-cookie.min.js") }}
         </script>
@@ -22,7 +25,12 @@
             var retina = window.devicePixelRatio > 1;
         </script>
 
-    <link rel="stylesheet" href="/css/app.css" />
+    <link rel="stylesheet" href="{{ baseUrl }}css/site.combined.min.{{staticAssetsVersion}}.css">
+    {# {{ source ("index_critical.min.css", ignore_missing = true) }} #}
+    <script>
+        {{ source("_inlinejs/loadCSS.min.js") }}
+        {{ source("_inlinejs/cssrelpreload.min.js") }}
+    </script>
 
 </head>
 
@@ -41,19 +49,25 @@
                 // define a dependency bundle
                 loadjs(
                     [
-                        '{{ baseUrl }}js/vue.min.{{staticAssetsVersion}}.js',
+                        '{{ baseUrl }}js/jquery.min.{{staticAssetsVersion}}.js',
                     ],
-                    'vue'
+                    'jquery'
                 );
                 loadjs(
                     [
-                        '{{ baseUrl }}js/axios.min.{{staticAssetsVersion}}.js',
+                        '{{ baseUrl }}js/slick.min.{{staticAssetsVersion}}.js',
                     ],
-                    'axios'
+                    'slick'
                 );
-                loadjs.ready(['vue', 'axios'], {
+                loadjs(
+                    [
+                        '{{ baseUrl }}js/jquery.magnific-popup.min.{{staticAssetsVersion}}.js',
+                    ],
+                    'magnific'
+                );
+                loadjs.ready(['jquery', 'slick', 'magnific'], {
                     success: function() {
-                        
+                        console.log('Loaded jquery, slick and magnific');
                     }
                 });
             </script>

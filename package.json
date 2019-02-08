@@ -57,8 +57,9 @@
     },
     "globs": {
         "distCss": [
-            "./build/fonts/fontello/css/fontello-codes.css",
-            "./build/css/*.css"
+            "./build/css/*.css",
+            "./node_modules/slick-carousel/slick/slick.css",
+            "./node_modules/magnific-popup/dist/magnific-popup.css"
         ],
         "img": [
             "./web/img/"
@@ -66,7 +67,6 @@
         "components": [
         ],
         "fonts": [
-            "./build/fonts/fontello/font/*.{eot,ttf,woff,woff2}",
             "./src/fonts/*.{eot,ttf,woff,woff2}"
         ],
         "purgecss": [
@@ -82,11 +82,12 @@
         ],
         "distJs": [
             "./build/js/*.js",
-            "./node_modules/axios/dist/axios.min.js",
             "./node_modules/lazysizes/lazysizes.min.js",
             "./node_modules/lazysizes/plugins/bgset/ls.bgset.min.js",
             "./node_modules/picturefill/dist/picturefill.min.js",
-            "./node_modules/vue/dist/vue.min.js"
+            "./node_modules/slick-carousel/slick/slick.min.js",
+            "./node_modules/magnific-popup/dist/jquery.magnific-popup.min.js",
+            "./node_modules/jquery/dist/jquery.min.js"
         ],
         "babelJs": [
             "./src/js/*.js"
@@ -94,17 +95,15 @@
         "inlineJs": [
             "./node_modules/fg-loadcss/src/loadCSS.js",
             "./node_modules/fg-loadcss/src/cssrelpreload.js",
-            "./node_modules/fontfaceobserver/fontfaceobserver.js",
             "./node_modules/loadjs/dist/loadjs.min.js",
             "./node_modules/tiny-cookie/tiny-cookie.min.js",
-            "./src/js/tab-handler.js",
-            "./src/js/register-service-worker.js",
-            "./src/js/asyncload-site-fonts.js"
+            "./src/js/register-service-worker.js"
         ],
         "siteIcon": "./web/img/site/favicon.*"
     },
     "dependencies": {
         "slick-carousel": "^1.8.1",
+        "magnific-popup": "^1.1.0",
         "jquery": "^3.3.1",
         "fg-loadcss": "^1.2.0",
         "lazysizes": "^2.0.6",
