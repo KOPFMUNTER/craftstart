@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width,minimum-scale=1">
         
         <script>
-            {% if craft.app.config.general.isSystemOn %}
+            {% if craft.app.config.general.isSystemLive %}
                 {{ source("_inlinejs/register-service-worker.min.js") }}
             {% endif %}
             {{ source("_inlinejs/loadjs.min.js") }}
@@ -26,11 +26,6 @@
         </script>
 
     <link rel="stylesheet" href="{{ baseUrl }}css/site.combined.min.{{staticAssetsVersion}}.css">
-    {# {{ source ("index_critical.min.css", ignore_missing = true) }} #}
-    <script>
-        {{ source("_inlinejs/loadCSS.min.js") }}
-        {{ source("_inlinejs/cssrelpreload.min.js") }}
-    </script>
 
 </head>
 
@@ -53,24 +48,23 @@
                     ],
                     'jquery'
                 );
-                loadjs(
-                    [
-                        '{{ baseUrl }}js/slick.min.{{staticAssetsVersion}}.js',
-                    ],
-                    'slick'
-                );
-                loadjs(
-                    [
-                        '{{ baseUrl }}js/jquery.magnific-popup.min.{{staticAssetsVersion}}.js',
-                    ],
-                    'magnific'
-                );
-                loadjs.ready(['jquery', 'slick', 'magnific'], {
+                loadjs.ready(['jquery'], {
                     success: function() {
-                        console.log('Loaded jquery, slick and magnific');
+                        loadjs(
+                            [
+                                '{{ baseUrl }}js/slick.min.{{staticAssetsVersion}}.js',
+                                '{{ baseUrl }}js/jquery.magnific-popup.min.{{staticAssetsVersion}}.js',
+                            ],
+                            'plugins'
+                        );
+                        loadjs.ready(['plugins'], {
+                            success: function() {
+                                
+                            }
+                        });
                     }
                 });
-            </script>
+        </script>
 
 </body>
 
