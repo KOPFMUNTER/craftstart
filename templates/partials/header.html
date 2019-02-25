@@ -1,17 +1,11 @@
-{% set menu = craft.entries.section('menu').slug('not startseite').level('<=2').excludeFromNav('not 1') %}
+{% set menu = craft.entries.section('menu').slug('not startseite').level('<=2').excludeFromNav('not 1').all() %}
 
 <div class="header-wrapper">
-        <div class="row header">
-            <div class="medium-3 large-3 columns">
-                <h1 class="hide">{{ siteName }}</h1>
-                <a href="/"><img src="https://placehold.it/300x150/CCCCCC/FFFFFF" alt="<%= projectname %>" class="logo" /></a>
-            </div>
-            <div class="medium-9 large-9 columns">
-                <nav class="main-nav hide-for-small-only">
+    <header class="header container mx-auto flex justify-between items-center">
+        <img src="https://placehold.it/300x150/CCCCCC/FFFFFF" class="logo" />
+        <nav>
+            {% include "partials/nav" %}
+        </nav>
+    </header>
+</div>
 
-                    {% include 'partials/nav' %}
-
-                </nav>
-            </div>
-        </div>
-    </div>

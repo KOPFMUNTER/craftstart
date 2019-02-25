@@ -1,5 +1,5 @@
 {# Replace the default `entry` variable with the home page's entry model #}
-{% set entry = craft.entries.section('menu').slug('startseite').first() %}
+{% set entry = craft.entries.section('menu').slug('startseite').one() %}
 
 {# Load the home page's template from the "pages" structure #}
 {% include "seiten/_types/startseite" %}

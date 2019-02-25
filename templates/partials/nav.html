@@ -1,7 +1,7 @@
-<ul class="clearfix">
+<ul class="clearfix list-reset flex flex-1">
     {% nav entry in menu %}
     
-    <li{% if entry.slug == craft.request.getSegment(entry.level) %} class="active"{% endif %}>
+    <li{% if entry.slug == craft.app.request.getSegment(entry.level) %} class="active"{% endif %}>
 
         
         <a href="{{ entry.url }}" {% if entry.hasDescendants() %}class="has-children" {% endif %}>{{ entry.title }}</a>
