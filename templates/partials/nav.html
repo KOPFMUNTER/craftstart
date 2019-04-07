@@ -4,7 +4,7 @@
     <li{% if entry.slug == craft.app.request.getSegment(entry.level) %} class="active"{% endif %}>
 
         
-        <a href="{{ entry.url }}" {% if entry.hasDescendants() %}class="has-children" {% endif %}>{{ entry.title }}</a>
+        <a href="{{ entry.url }}" class="{% if entry.hasDescendants() %}has-children{% endif %} ml-8 no-underline text-black hover:text-blue" >{{ entry.title }}</a>
         
 
         {% ifchildren %}
